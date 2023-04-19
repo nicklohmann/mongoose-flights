@@ -52,7 +52,7 @@ function show(req, res) {
   .then(flight => {
     console.log(flight);
     res.render('flights/show', {
-      title: "flight detail" ,
+      title: "flight details" ,
       flight: flight
     })
   })
@@ -66,7 +66,8 @@ function edit(req, res) {
   Flight.findById(req.params.flightId)
   .then(flight => {
     res.render('flights/edit' , {
-      todo
+      title: "Edit flight",
+      flight
     })
   })
   .catch(error => {
@@ -75,17 +76,20 @@ function edit(req, res) {
   })
 }
 
-// function update(req, res) {
-//   req.body.done = !!req.body.done
-//   Flight.findByIdAndUpdate(req.params.todoId,req.body,{new:true})
-//   .then(todo => {
-//     res.redirect(`/todos/${todo._id}`)
-//   })
-//   .catch(error => {
-//     console.log(error)
-//     res.redirect('/todos')
-//   })
-// }
+function update(req, res) {
+  req.body.done = !!req.body.done
+  for (let key in req.body) {
+    if (req.body[key] === '') delete req.body[key]
+  }
+  Flight.findByIdAndUpdate(req.params.flightId,req.body,{new:true})
+  .then(flight => {
+    res.redirect(`/flights/${flight._id}`)
+  })
+  .catch(error => {
+    console.log(error)
+    res.redirect('/flights')
+  })
+}
 
 
 export {
@@ -95,5 +99,5 @@ export {
   deleteFlight as delete,
   show,
   edit,
-  //update,
+  update,
 }

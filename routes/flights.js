@@ -5,15 +5,19 @@ const router = Router()
 
 // GET localhost:3000/flights
 router.get('/' , flightsCtrl.index)
-router.post('/' , flightsCtrl.create)
-
+// GET localhost:3000/flights/new
 router.get('/new' , flightsCtrl.new)
-
-router.get('/:flightId' , flightsCtrl.show)
+// GET localhost:3000/flights/:movieId
+router.get('/:flightId/' , flightsCtrl.show)
+// POST localhost:3000/flights
+router.post('/' , flightsCtrl.create)
+// GET localhost:3000/flights/:flightId/edit
 router.get('/:flightId/edit' , flightsCtrl.edit)
-
-// GET localhost:3000/todos/:todoId
+// DELETE localhost:3000/todos/:todoId
 router.delete('/:flightId' , flightsCtrl.delete)
+// PUT localhost:3000/flights/:flightsId
+router.put('/:flightId' , flightsCtrl.update)
+
 //router.put('/:flightId/edit' , todosCtrl.update)
 
 
