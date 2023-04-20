@@ -46,9 +46,8 @@ function deleteFlight(req, res) {
 }
 
 function show(req, res) {
-  console.log(req.body);
-  console.log(req.params.flightId);
   Flight.findById(req.params.flightId)
+  .populate('')
   .then(flight => {
     console.log(flight);
     res.render('flights/show', {
@@ -90,6 +89,44 @@ function update(req, res) {
     res.redirect('/flights')
   })
 }
+function createTicket(req, res) {
+  Flight.findById(req.params.flightId)
+  .then(flight => {
+    flight.tickets.push(req.body)
+    flight.save()
+    .then(()=> {
+      res.redirect(`/flights/${flight._id}`)
+    })
+    .catch(err => {
+      console.log(err)
+      res.redirect('/')
+    })
+  })
+  .catch(err => {
+    console.log(err)
+    res.redirect('/')
+  })
+}
+function deleteTicket(req, res) {
+  Flight.findById(req.params.ticketId)
+  .then(ticket => {
+    ticket.reviews.remove(req.params.ticketId)
+    // movie.reviews.id(req.params.reviewId).deleteOne()
+    ticket.save()
+    .then(() => {
+      res.redirect(`/flights/${flight._id}`)
+    })
+    .catch(err => {
+      console.log(err)
+      res.redirect('/flights')
+    })
+  })
+  .catch(err => {
+    console.log(err)
+    res.redirect('/flights')
+  })
+}
+
 
 
 export {
@@ -100,4 +137,6 @@ export {
   show,
   edit,
   update,
+  createTicket,
+  deleteTicket
 }

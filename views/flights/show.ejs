@@ -10,7 +10,53 @@
     <div>Airport: <%= flight.aiport %> </div>
     <div>Flight Number: <%= flight.flightNo %></div>
     <div>Departs: <%= flight.departs %></div>
+    <form 
+    id="Add-Ticket"
+    action="/flights/<%= flight._id %>/tickets"
+    method="POST"
+    >
+      <label for="content-textarea">new Ticket:</label>
+      <label for="Seat">Seat:</label>
+      <input name="seat" required pattern="[A-F][1-9]\d?""> 
+      <label for="Price">Price:</label>
+      <input name="price">
+      <button type="submit">Add Ticket</button>
+  </form>
   </section>
+
+  <% if (flight.tickets.length) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Seat</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% let total = 0 %>
+        <% flight.tickets.forEach(function(ticket) { %>
+          <tr>
+            <td><%= ticket.seat %></td>
+            <td><%= ticket.price %></td>
+            <td>
+              <form action="/flights/<%= flight._id %>/tickets/<%= ticket._id %>?_method=Delete" method="POST">
+              <button>X</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+        <tr>
+          <td colspan="2"></td>
+          <td>
+            <strong><%= (total / flight.tickets.length).toFixed(1) %></strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  <% } else { %>
+    <h3>No Tickets Yet</h3>
+  <% } %>
+
 </main>
   
 <%- include('../partials/footer') %>
