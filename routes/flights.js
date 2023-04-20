@@ -13,6 +13,8 @@ router.get('/:flightId/' , flightsCtrl.show)
 router.post('/' , flightsCtrl.create)
 //Post /flights/:flightId/reviews
 router.post("/:flightId/tickets" , flightsCtrl.createTicket)
+//Post /flights/:flightId/reviews
+router.post("/:flightId/meals" , flightsCtrl.addToMeal)
 // GET localhost:3000/flights/:flightId/edit
 router.get('/:flightId/edit' , flightsCtrl.edit)
 // DELETE localhost:3000/todos/:todoId

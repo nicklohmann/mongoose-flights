@@ -1,79 +1,78 @@
 <%- include('../partials/html-head') %>
-<link rel="stylesheet" href="/stylesheets/flights/show.css" />
+<!-- <link rel="stylesheet" href="/stylesheets/movies/forms.css" /> -->
 <%- include('../partials/nav') %>
-
 <main>
   <h1><%= title %></h1>
-  <section>
-    <a href="/flights/<%=flight._id%>/edit"> Edit Flight</a>
-    <div>Airline: <%= flight.airline %></div>
-    <div>Airport: <%= flight.aiport %> </div>
-    <div>Flight Number: <%= flight.flightNo %></div>
-    <div>Departs: <%= flight.departs %></div>
-    <div>Meal:</div>
-    <ul>
-      <%= flight.meals.forEach(mealType => { %>
-      <li><%= mealType.name %></li>
+  <table>
+    <tr>
+      <th>Flight No.</th>
+      <td>
+        <%= flight.flightNo %>
+        <a href="/flights/<%= flight._id %>/edit"><button>Edit</button></a>
+      </td>
+    </tr>
+    <tr>
+      <th>Airline</th>
+      <td><%= flight.airline %></td>
+    </tr>
+    <tr>
+      <th>Airport</th>
+      <td><%= flight.airport %></td>
+    </tr>
+    <tr>
+      <th>Depart time</th>
+      <td><%= flight.departs %></td>
+    </tr>
+    <tr>
+      <th>Meal</th>
+      <td>
+        <% if (flight.meal.length) { %>
+          <ul>
+            <% flight.meal.forEach(mealChoice => { %>
+              <li><%= mealChoice.name %></li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p>No meals added</p>
+        <% } %>
+      </td>
+    </tr>
+  </table>
+  <h3>Current menu:</h3>
+  <form action="/flights/<%= flight._id %>/meals" method="POST">
+    <select name="mealId" >
+      <% meals.forEach(meal => { %>
+      <option value="<%= meal._id %>"><%= meal.name %></option>
       <% }) %>
-  </section>
-  <section>
-    <form id="add-meal" action="/flights/<%= flight.id %>/meals"method="POST">
-      <select name="mealId">
-        <% meals.forEach(meal => {%>
-        <option value="<%= meal.id %>"<%= meal.name %>></option><% }) %> 
-      </select>
-      <button type="submit">Add Meal</button>
-    </form>
-  </section>
-    </ul>
-
-    <form 
-    id="Add-Ticket"
-    action="/flights/<%= flight._id %>/tickets"
-    method="POST"
-    >
-      <label for="content-textarea">new Ticket:</label>
-      <label for="Seat">Seat:</label>
-      <input name="seat" required pattern="[A-F][1-9]\d?""> 
-      <label for="Price">Price:</label>
-      <input name="price">
-      <button type="submit">Add Ticket</button>
+    </select>
+    <button type="submit">Add to Meal</button>
   </form>
-  </section>
-
+  <br />
+  <h2>Tickets</h2>
+  <form action="/flights/<%= flight._id %>/tickets" method="POST">
+    <label for="seat">Seat:</label>
+    <input type="text" name="seat" id="seat" placeholder="A1~F99" />
+    <label for="price">Price:</label>
+    <input type="number" name="price" id="price" min="0" />
+    <button type="submit">Create Ticket</button>
+  </form>
   <% if (flight.tickets.length) { %>
-    <table>
-      <thead>
-        <tr>
-          <th>Seat</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% let total = 0 %>
-        <% flight.tickets.forEach(function(ticket) { %>
-          <tr>
-            <td><%= ticket.seat %></td>
-            <td><%= ticket.price %></td>
-            <td>
-              <form action="/flights/<%= flight._id %>/tickets/<%= ticket._id %>?_method=Delete" method="POST">
-              <button>X</button>
-              </form>
-            </td>
-          </tr>
-        <% }) %>
-        <tr>
-          <td colspan="2"></td>
-          <td>
-            <strong><%= (total / flight.tickets.length).toFixed(1) %></strong>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  <% } else { %>
-    <h3>No Tickets Yet</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Seat</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% flight.tickets.forEach(ticket => { %>
+      <tr>
+        <td><%= ticket.seat %></td>
+        <td><%= ticket.price %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
   <% } %>
-
 </main>
-  
 <%- include('../partials/footer') %>
